@@ -1,52 +1,59 @@
-import { useForm, type RegisterOptions } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import Input from '~/components/Input'
-import { schema, Schema } from '~/utils/rule'
+import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from '~/apis/auth.api'
 import { omit } from 'lodash'
+import { schema, Schema } from '~/utils/rule'
+import Input from '~/components/Input'
+import { registerAccount } from '~/apis/auth.api'
 import { isAxiosUnprocessableEntityError } from '~/utils/utils'
-import { ResponseApi } from '~/types/utils.type'
+import { ErrorResponse } from '~/types/utils.type'
+import { useContext } from 'react'
+import { AppContext } from '~/contexts/app.context'
+
 type FormData = Schema
+
 export default function Register() {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors }
-  } = useForm<FormData>({ resolver: yupResolver(schema) })
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
+  })
   const registerAccountMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => {
-      return registerAccount(body)
-    }
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
   })
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
-      onSuccess: (data) => {
-        console.log('Registration successful:', data)
+      onSuccess: () => {
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
               setError(key as keyof Omit<FormData, 'confirm_password'>, {
                 message: formError[key as keyof Omit<FormData, 'confirm_password'>],
-                type: 'Sever'
+                type: 'Server'
               })
             })
           }
-          // if (fromError?.email) {
+          // if (formError?.email) {
           //   setError('email', {
-          //     message: fromError.email,
+          //     message: formError.email,
           //     type: 'Server'
           //   })
           // }
-          // if (fromError?.password) {
+          // if (formError?.password) {
           //   setError('password', {
-          //     message: fromError.password,
+          //     message: formError.password,
           //     type: 'Server'
           //   })
           // }
@@ -56,8 +63,8 @@ export default function Register() {
   })
 
   return (
-    <div className='bg-orange-600'>
-      <div className=' container'>
+    <div className='bg-orange'>
+      <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-5 py-12 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit} noValidate>
@@ -67,26 +74,26 @@ export default function Register() {
                 register={register}
                 type='email'
                 className='mt-8'
-                placeholder='Email'
                 errorMessage={errors.email?.message}
-                autoComplete='on'
+                placeholder='Email'
               />
               <Input
                 name='password'
                 register={register}
                 type='password'
                 className='mt-2'
-                placeholder='Password'
                 errorMessage={errors.password?.message}
+                placeholder='Password'
                 autoComplete='on'
               />
+
               <Input
                 name='confirm_password'
                 register={register}
                 type='password'
                 className='mt-2'
-                placeholder='Confirm Password'
                 errorMessage={errors.confirm_password?.message}
+                placeholder='Confirm Password'
                 autoComplete='on'
               />
 
