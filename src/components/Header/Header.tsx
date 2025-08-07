@@ -20,16 +20,16 @@ export default function Header() {
     logoutMutation.mutate()
   }
   return (
-    <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
+    <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
       <div className='container'>
         <div className='flex justify-end'>
           <Popover
-            className='flex items-center py-1 hover:text-white/70 cursor-pointer'
+            className='flex cursor-pointer items-center py-1 hover:text-white/70'
             renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+              <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
                 <div className='flex flex-col py-2 pr-28 pl-3'>
                   <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
-                  <button className='py-2 px-3 hover:text-orange mt-2'>English</button>
+                  <button className='mt-2 py-2 px-3 hover:text-orange'>English</button>
                 </div>
               </div>
             }
@@ -40,7 +40,7 @@ export default function Header() {
               viewBox='0 0 24 24'
               strokeWidth={1.5}
               stroke='currentColor'
-              className='w-5 h-5'
+              className='h-5 w-5'
             >
               <path
                 strokeLinecap='round'
@@ -55,31 +55,31 @@ export default function Header() {
               viewBox='0 0 24 24'
               strokeWidth={1.5}
               stroke='currentColor'
-              className='w-5 h-5'
+              className='h-5 w-5'
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
           </Popover>
           {isAuthenticated && (
             <Popover
-              className='flex items-center py-1 hover:text-white/70 cursor-pointer ml-6'
+              className='ml-6 flex cursor-pointer items-center py-1 hover:text-white/70'
               renderPopover={
-                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
                   <Link
                     to={path.profile}
-                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    className='block w-full bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'
                   >
                     Tài khoản của tôi
                   </Link>
                   <Link
                     to='/'
-                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    className='block w-full bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'
                   >
                     Đơn mua
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    className='block w-full bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'
                   >
                     Đăng xuất
                   </button>
