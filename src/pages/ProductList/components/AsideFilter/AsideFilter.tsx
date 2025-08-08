@@ -11,7 +11,7 @@ import { Schema, schema } from '~/utils/rule'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { NoUndefinedField } from '~/types/utils.type'
 import InputNumber from '~/components/InputNumber'
-import RatingStars from '~/pages/ProductList/RatingStars'
+import RatingStars from '~/pages/ProductList/components/RatingStars'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
