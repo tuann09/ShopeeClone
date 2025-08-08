@@ -16,12 +16,6 @@ interface Props {
   queryConfig: QueryConfig
   categories: Category[]
 }
-const handleRemoveAll = () => {
-  navigate({
-    pathname: path.home,
-    search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
-  })
-}
 
 type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
 /**
@@ -47,6 +41,13 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
     resolver: yupResolver(priceSchema)
   })
   const navigate = useNavigate()
+  const handleRemoveAll = () => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
+    })
+  }
+
   const onSubmit = handleSubmit((data) => {
     navigate({
       pathname: path.home,
